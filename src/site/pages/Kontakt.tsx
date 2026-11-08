@@ -1,62 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { siteData } from "../content";
 import { envConfig } from "../env";
 
-declare global {
-  interface Window {
-    hbspt?: {
-      forms: {
-        create: (config: {
-          portalId: string;
-          formId: string;
-          region?: string;
-          target?: string;
-        }) => void;
-      };
-    };
-  }
-}
-
 export const Kontakt: React.FC = () => {
   const { contact } = siteData;
-  const formLoadedRef = useRef(false);
 
-  useEffect(() => {
-    if (formLoadedRef.current) return;
-
-    const portalId = envConfig.hubspotPortalId;
-    const formId = envConfig.hubspotFormId;
-    const region = envConfig.hubspotRegion;
-
-    const scriptId = "hubspot-form-script";
-    let script = document.getElementById(scriptId) as HTMLScriptElement | null;
-
-    const initHubspotForm = () => {
-      if (window.hbspt) {
-        window.hbspt.forms.create({
-          portalId,
-          formId,
-          region,
-          target: "#hubspot-form-target",
-        });
-        formLoadedRef.current = true;
-      }
-    };
-
-    if (!script) {
-      script = document.createElement("script");
-      script.id = scriptId;
-      script.src = "https://js-eu1.hsforms.net/forms/embed/v2.js";
-      script.charset = "utf-8";
-      script.type = "text/javascript";
-      script.onload = () => {
-        initHubspotForm();
-      };
-      document.body.appendChild(script);
-    } else {
-      initHubspotForm();
-    }
-  }, []);
+  const destinationAddress = envConfig.address;
+  const mapsEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(destinationAddress)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+  const mapsDirectionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destinationAddress)}`;
 
   return (
     <div className="min-h-screen bg-[#f8f8f9] text-[#1a1a1a] pt-28 pb-20 px-4 sm:px-6 lg:px-8">
@@ -149,15 +100,50 @@ export const Kontakt: React.FC = () => {
           </div>
         </div>
 
-        {/* Formular Section */}
-        <div className="bg-white rounded-2xl p-6 sm:p-10 shadow-sm border border-neutral-200">
-          <h2 className="text-2xl font-normal font-editorial text-neutral-900 mb-6 text-center">
-            Kontaktformular
-          </h2>
-          <div id="hubspot-form-target" className="min-h-[350px] flex items-center justify-center">
-            <div className="text-sm text-neutral-400 animate-pulse">
-              Formular wird geladen...
+        {/* Standort & Google Maps Section */}
+        <div className="bg-white rounded-2xl p-6 sm:p-8 md:p-10 shadow-sm border border-neutral-200">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <div>
+              <h2 className="text-2xl font-normal font-editorial text-neutral-900">
+                Unser Standort
+              </h2>
+              <p className="text-sm text-neutral-600 mt-1">
+                {destinationAddress}
+              </p>
             </div>
+            <a
+              href={mapsDirectionsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-white text-sm font-medium transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900 self-start sm:self-auto"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+              <span>Route planen</span>
+            </a>
+          </div>
+
+          <div className="w-full h-80 sm:h-96 md:h-[450px] rounded-xl overflow-hidden border border-neutral-200 bg-neutral-100 shadow-inner">
+            <iframe
+              title={`Google Maps Standort - ${destinationAddress}`}
+              src={mapsEmbedUrl}
+              className="w-full h-full border-0"
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
         </div>
       </div>

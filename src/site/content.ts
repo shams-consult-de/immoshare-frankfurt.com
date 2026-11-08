@@ -38,6 +38,7 @@ export const siteData = {
   },
   gallery: [
     { src: "/images/roedermark_9.jpg", alt: "ImmoShare Apartment Wohnbereich & Details" },
+    { src: "/images/roedermark_1.jpg", alt: "ImmoShare Apartment Schlafzimmer & Doppelbett" },
     { src: "/images/roedermark_2.jpg", alt: "ImmoShare Apartment Schlafzimmer 1" },
     { src: "/images/roedermark_3.jpg", alt: "ImmoShare Apartment Schlafzimmer 2" },
     { src: "/images/roedermark_4.jpg", alt: "ImmoShare Apartment Küche & Essbereich" },
@@ -49,11 +50,12 @@ export const siteData = {
     { src: "/images/roedermark_12.jpg", alt: "ImmoShare Apartment Gemütlichkeit" },
     { src: "/images/roedermark_13.jpg", alt: "ImmoShare Apartment Modernes Interieur" },
     { src: "/images/roedermark_14.jpg", alt: "ImmoShare Apartment Entspannung" },
+    { src: "/images/roedermark_5.jpg", alt: "ImmoShare Apartment Überdachte Terrasse & Lounge" },
     { src: "/images/roedermark_15.jpg", alt: "ImmoShare Apartment Außenansicht & Hof" },
   ],
   contact: {
     title: "Kontakt",
-    lead: "Wollen Sie buchen oder haben Sie noch Fragen? Nehmen Sie einfach und schnell mit Uns Kontakt auf. Nutzen Sie dafür entweder unserer Kontaktformular, unsere E-Mail oder rufen Sie einfach an.",
+    lead: "Wollen Sie buchen oder haben Sie noch Fragen? Nehmen Sie einfach und schnell mit uns Kontakt auf. Schreiben Sie uns eine E-Mail oder rufen Sie uns direkt an.",
     phone: {
       landline: "069795882-55",
       mobile: "015151864090",
@@ -62,7 +64,7 @@ export const siteData = {
     address: {
       name: "Immoshare Frankfurt",
       street: "Dieburger Str. 50",
-      city: "63322 Rödermark",
+      city: "63322 Rödermark, Hessen",
     },
   },
   imprint: {
@@ -73,14 +75,14 @@ export const siteData = {
         "Majeed Shams",
         "Immoshare Frankfurt, Wohnraumvermietung",
         "Dieburger Str. 50",
-        "63322 Rödermark",
+        "63322 Rödermark, Hessen",
       ],
     },
     hauptsitz: {
       title: "Hauptsitz",
       lines: [
         "Dieburger Str. 50",
-        "63322 Rödermark",
+        "63322 Rödermark, Hessen",
       ],
     },
     kontakt: {
