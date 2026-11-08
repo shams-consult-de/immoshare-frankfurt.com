@@ -45,8 +45,8 @@ export const Home: React.FC<HomeProps> = ({ navigate }) => {
         <div className="max-w-5xl mx-auto mt-12 md:mt-16 px-2">
           <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-neutral-200/80 aspect-[16/10] bg-neutral-100">
             <img
-              src={gallery[0].src}
-              alt={gallery[0].alt}
+              src={gallery[0]!.src}
+              alt={gallery[0]!.alt}
               className="w-full h-full object-cover"
               loading="eager"
             />
@@ -75,8 +75,8 @@ export const Home: React.FC<HomeProps> = ({ navigate }) => {
         <div className="space-y-4 mb-16">
           <div className="relative rounded-2xl overflow-hidden shadow-lg border border-neutral-200 bg-neutral-900 aspect-[16/10] sm:aspect-[16/9]">
             <img
-              src={gallery[activeImageIndex].src}
-              alt={gallery[activeImageIndex].alt}
+              src={gallery[activeImageIndex]!.src}
+              alt={gallery[activeImageIndex]!.alt}
               className="w-full h-full object-cover transition-opacity duration-300"
             />
 
