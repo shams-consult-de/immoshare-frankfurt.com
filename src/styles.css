@@ -30,6 +30,10 @@
  */
 
 @theme inline {
+  --font-serif: "Cardo", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --color-brand-dark: var(--brand-dark);
+  --color-muted-bg: var(--muted-bg);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -74,6 +78,8 @@
 
 :root {
   --radius: 0.625rem;
+  --brand-dark: oklch(0.178 0 0);
+  --muted-bg: oklch(0.98 0.002 286);
   --background: oklch(1 0 0);
   --foreground: oklch(0.129 0.042 264.695);
   --card: oklch(1 0 0);
@@ -148,8 +154,58 @@
     border-color: var(--color-border);
   }
 
+  html {
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
     background-color: var(--color-background);
-    color: var(--color-foreground);
+    color: oklch(0.218 0 0);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
   }
+}
+
+.font-editorial {
+  font-family: var(--font-serif);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  background-color: var(--brand-dark);
+  color: oklch(1 0 0);
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-primary:hover {
+  background-color: oklch(0.321 0 0);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  border: 1px solid var(--brand-dark);
+  color: var(--brand-dark);
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-outline:hover {
+  background-color: var(--brand-dark);
+  color: oklch(1 0 0);
+  transform: translateY(-1px);
 }

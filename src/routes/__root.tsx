@@ -4,12 +4,18 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useNavigate,
+  useLocation,
   HeadContent,
   Scripts,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
+import Navbar from "../site/components/Navbar";
+import Footer from "../site/components/Footer";
+import MobileBottomBar from "../site/components/MobileBottomBar";
+import { validateEnvironment } from "../site/env";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -81,16 +87,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { name: "theme-color", content: "#111111" },
+      { name: "robots", content: "index, follow" },
+      { name: "format-detection", content: "telephone=no" },
+      { title: "ImmoShare Frankfurt — Apartments nahe Frankfurt | Rödermark" },
+      { name: "description", content: "Modern ausgestattete Apartments nahe Frankfurt in Rödermark." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap",
+      },
       {
         rel: "stylesheet",
         href: appCss,
@@ -106,11 +117,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="de" className="scroll-smooth">
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="antialiased selection:bg-neutral-200 selection:text-black">
         {children}
         <Scripts />
       </body>
@@ -124,7 +135,43 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <SiteLayout />
     </QueryClientProvider>
+  );
+}
+
+function SiteLayout() {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const env = validateEnvironment();
+  if (!env.isValid) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background p-8">
+        <div className="max-w-xl rounded-lg border border-destructive p-8">
+          <h1 className="text-destructive text-xl font-semibold">Fatal Configuration Error</h1>
+          <p className="mt-2 text-sm">Missing required settings:</p>
+          <ul className="mt-2 font-mono text-sm">
+            {env.missing.map((k) => (
+              <li key={k}>{k}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+  const go = (path: string) => {
+    navigate({ to: path.startsWith("/") ? path : `/${path}` });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const current = pathname.replace(/\/+$/, "") || "/";
+  return (
+    <div className="flex min-h-screen flex-col bg-background">
+      <Navbar currentPath={current} navigate={go} />
+      <main className="flex-grow">
+        <Outlet />
+      </main>
+      <Footer navigate={go} />
+      <MobileBottomBar navigate={go} />
+    </div>
   );
 }
