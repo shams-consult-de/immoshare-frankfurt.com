@@ -1,0 +1,113 @@
+# ==============================================================================
+# IONOS Apache Web Server Configuration - ImmoShare Frankfurt (Static Site)
+# ==============================================================================
+
+DirectoryIndex index.html
+
+# Prevent automatic directory listings and unwanted trailing-slash redirect chains
+Options -Indexes
+<IfModule mod_dir.c>
+  DirectorySlash Off
+</IfModule>
+
+# Serve real HTTP 404 header and static page for non-existent routes
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # 1. Collapse multiple consecutive slashes (e.g. //kontakt -> /kontakt)
+  RewriteCond %{THE_REQUEST} ^[A-Z]+\s//+([^\s]*) [NC]
+  RewriteRule ^ /%1 [R=301,L,NE]
+
+  # 2. Force HTTPS & Non-WWW
+  RewriteCond %{HTTP_HOST} ^www\.immoshare-frankfurt\.com$ [NC,OR]
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://immoshare-frankfurt.com/$1 [R=301,L]
+
+  # ----------------------------------------------------------------------------
+  # Legacy WordPress Query Parameter 301 Redirects
+  # ----------------------------------------------------------------------------
+  RewriteCond %{QUERY_STRING} ^page_id=3$
+  RewriteRule ^$ https://immoshare-frankfurt.com/kontakt [R=301,L,QSD]
+
+  RewriteCond %{QUERY_STRING} ^page_id=25$
+  RewriteRule ^$ https://immoshare-frankfurt.com/imprint [R=301,L,QSD]
+
+  RewriteCond %{QUERY_STRING} ^page_id=2266$
+  RewriteRule ^$ https://immoshare-frankfurt.com/datenschutz [R=301,L,QSD]
+
+  # Common aliases
+  RewriteRule ^(?:home|startseite)/?$ https://immoshare-frankfurt.com/ [R=301,L,NC]
+  RewriteRule ^(?:contact|buchen)/?$ https://immoshare-frankfurt.com/kontakt [R=301,L,NC]
+  RewriteRule ^(?:impressum)/?$ https://immoshare-frankfurt.com/imprint [R=301,L,NC]
+  RewriteRule ^(?:privacy|datenschutzerklaerung)/?$ https://immoshare-frankfurt.com/datenschutz [R=301,L,NC]
+
+  # Strip .html from direct requests
+  RewriteCond %{THE_REQUEST} ^[A-Z]+\s/+(?:index)\.html[\s?] [NC]
+  RewriteRule ^ https://immoshare-frankfurt.com/ [R=301,L]
+
+  RewriteCond %{THE_REQUEST} ^[A-Z]+\s/+(?!404\.html)(.+)\.html[\s?] [NC]
+  RewriteRule ^ https://immoshare-frankfurt.com/%1 [R=301,L]
+
+  # Strip trailing slash for pages (except root "/")
+  RewriteCond %{REQUEST_URI} ^/(.+)/$
+  RewriteRule ^/(.+)/$ /$1 [R=301,L]
+
+  # If exact file exists (assets, images, fonts, sitemap.xml, robots.txt), serve directly
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteRule ^ - [L]
+
+  # If directory with index.html exists, internally rewrite to index.html
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_FILENAME}/index.html -f
+  RewriteRule ^(.*)$ $1/index.html [L]
+
+  # Fallback for valid routes without physical directory slash (e.g. /kontakt -> /kontakt/index.html)
+  RewriteCond %{DOCUMENT_ROOT}/$1/index.html -f
+  RewriteRule ^(.*)$ $1/index.html [L]
+
+  # Non-existent routes: trigger real HTTP 404 Not Found
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{DOCUMENT_ROOT}/$1/index.html !-f
+  RewriteRule ^ - [R=404,L]
+</IfModule>
+
+# Caching & Performance
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 month"
+
+  # HTML pages - revalidate quickly
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType application/json "access plus 0 seconds"
+  ExpiresByType text/xml "access plus 1 day"
+  ExpiresByType application/xml "access plus 1 day"
+
+  # Static assets (JS, CSS, Images, Fonts) - long-term cache
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/jpg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+</IfModule>
+
+# Security Headers
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Gzip / Brotli Compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json image/svg+xml
+</IfModule>

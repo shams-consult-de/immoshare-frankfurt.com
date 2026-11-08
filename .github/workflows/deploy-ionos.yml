@@ -1,0 +1,61 @@
+name: Build & Deploy Static Site to IONOS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-ionos
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy Static Site to IONOS
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Static Production Site
+        env:
+          VITE_SITE_URL: ${{ secrets.VITE_SITE_URL || vars.VITE_SITE_URL || 'https://immoshare-frankfurt.com' }}
+          VITE_SITE_NAME: ${{ secrets.VITE_SITE_NAME || vars.VITE_SITE_NAME || 'ImmoShare Frankfurt' }}
+          VITE_CONTACT_EMAIL: ${{ secrets.VITE_CONTACT_EMAIL || vars.VITE_CONTACT_EMAIL || 'booking@immoshare-frankfurt.com' }}
+          VITE_CONTACT_PHONE_LANDLINE: ${{ secrets.VITE_CONTACT_PHONE_LANDLINE || vars.VITE_CONTACT_PHONE_LANDLINE || '069795882-55' }}
+          VITE_CONTACT_PHONE_MOBILE: ${{ secrets.VITE_CONTACT_PHONE_MOBILE || vars.VITE_CONTACT_PHONE_MOBILE || '015151864090' }}
+          VITE_CONTACT_ADDRESS: ${{ secrets.VITE_CONTACT_ADDRESS || vars.VITE_CONTACT_ADDRESS || 'Dieburger Str. 50, 63322 Rödermark, Hessen' }}
+          VITE_HUBSPOT_PORTAL_ID: ${{ secrets.VITE_HUBSPOT_PORTAL_ID || vars.VITE_HUBSPOT_PORTAL_ID || '147303447' }}
+          VITE_HUBSPOT_FORM_ID: ${{ secrets.VITE_HUBSPOT_FORM_ID || vars.VITE_HUBSPOT_FORM_ID || 'cc5c65ae-6bc6-49a1-8407-54256f81e1a4' }}
+          VITE_HUBSPOT_REGION: ${{ secrets.VITE_HUBSPOT_REGION || vars.VITE_HUBSPOT_REGION || 'eu1' }}
+        run: npm run build
+
+      - name: Deploy Static Files to IONOS via SFTP
+        env:
+          SSHPASS: ${{ secrets.IONOS_FTP_PASSWORD }}
+          FTP_SERVER: ${{ secrets.IONOS_FTP_SERVER }}
+          FTP_USER: ${{ secrets.IONOS_FTP_USERNAME }}
+          FTP_DIR: ${{ secrets.IONOS_FTP_DIR || '.' }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass
+          cd .output/public
+          sshpass -e sftp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P 22 "$FTP_USER@$FTP_SERVER" << EOF
+          cd $FTP_DIR
+          -rm -rf dist
+          put -r .
+          put .htaccess .
+          bye
+          EOF
