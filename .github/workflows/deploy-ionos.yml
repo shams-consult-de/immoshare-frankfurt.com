@@ -48,7 +48,7 @@ jobs:
           SSHPASS: ${{ secrets.IONOS_FTP_PASSWORD }}
           FTP_SERVER: ${{ secrets.IONOS_FTP_SERVER }}
           FTP_USER: ${{ secrets.IONOS_FTP_USERNAME }}
-          FTP_DIR: ${{ secrets.IONOS_FTP_DIR || '.' }}
+          FTP_DIR: ${{ secrets.IONOS_FTP_DIR }}
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass
           cd .output/public
