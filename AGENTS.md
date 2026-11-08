@@ -28,3 +28,6 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+- Site UI lives in src/site (pages, components, content, env); routes in src/routes are thin wrappers so content stays separate from routing.
+- Contact details and HubSpot IDs come only from VITE_* values via src/site/env.ts; the root layout shows a config error if any is missing.

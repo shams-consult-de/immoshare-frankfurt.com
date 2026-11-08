@@ -46,7 +46,7 @@ export const Kontakt: React.FC = () => {
     if (!script) {
       script = document.createElement("script");
       script.id = scriptId;
-      script.src = "//js-eu1.hsforms.net/forms/embed/v2.js";
+      script.src = "https://js-eu1.hsforms.net/forms/embed/v2.js";
       script.charset = "utf-8";
       script.type = "text/javascript";
       script.onload = () => {
