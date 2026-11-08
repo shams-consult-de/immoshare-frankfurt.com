@@ -1,23 +1,44 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import Home from "../site/pages/Home";
 
-// The home route ships no og:image, so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+// Legacy WordPress links (?page_id=…) keep working.
+const LEGACY: Record<string, string> = { "3": "/kontakt", "25": "/imprint", "2266": "/datenschutz" };
+
 export const Route = createFileRoute("/")({
+  validateSearch: (s: Record<string, unknown>) => ({
+    page_id: s.page_id != null ? String(s.page_id) : undefined,
+  }),
+  beforeLoad: ({ search }) => {
+    const to = search.page_id ? LEGACY[search.page_id] : undefined;
+    if (to) throw redirect({ to, replace: true });
+  },
+  head: () => ({
+    meta: [
+      { title: "ImmoShare Frankfurt — Apartments nahe Frankfurt | Rödermark" },
+      {
+        name: "description",
+        content:
+          "Ankommen und wohlfühlen – unser modern ausgestattetes Apartment nahe Frankfurt bietet Ihnen Komfort, Ruhe und eine hervorragende Lage in Rödermark.",
+      },
+      { property: "og:title", content: "ImmoShare Frankfurt — Apartments nahe Frankfurt" },
+      {
+        property: "og:description",
+        content: "Modern ausgestattete Apartments nahe Frankfurt in Rödermark.",
+      },
+    ],
+    links: [{ rel: "canonical", href: "https://immoshare-frankfurt.com/" }],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
+  const navigate = useNavigate();
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <Home
+      navigate={(p) => {
+        navigate({ to: p });
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }}
+    />
   );
 }

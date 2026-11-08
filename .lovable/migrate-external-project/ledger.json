@@ -1,0 +1,8 @@
+[
+ {"capability":"code","source":"React+Vite SPA","outcome":"migrate","status":"verified","next_action":null},
+ {"capability":"routes","source":"/, /kontakt, /imprint, /datenschutz + legacy redirects","outcome":"migrate","status":"verified","next_action":null},
+ {"capability":"assets","source":"13 referenced images, robots, sitemap","outcome":"migrate","status":"verified","next_action":null},
+ {"capability":"schema/records/auth","source":"none","outcome":"not applicable","status":"verified","next_action":null},
+ {"capability":"HubSpot contact form","source":"embed, portal 147303447","outcome":"preserve","status":"pending","next_action":"confirm form renders in preview"},
+ {"capability":"hosting/cutover","source":"IONOS via GitHub Actions","outcome":"cutover","status":"pending","next_action":"user publishes and points domain"}
+]
