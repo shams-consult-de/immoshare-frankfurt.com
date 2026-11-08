@@ -5,9 +5,8 @@ import Home from "../site/pages/Home";
 const LEGACY: Record<string, string> = { "3": "/kontakt", "25": "/imprint", "2266": "/datenschutz" };
 
 export const Route = createFileRoute("/")({
-  validateSearch: (s: Record<string, unknown>) => ({
-    page_id: s.page_id != null ? String(s.page_id) : undefined,
-  }),
+  validateSearch: (s: Record<string, unknown>): { page_id?: string } =>
+    s["page_id"] != null ? { page_id: String(s["page_id"]) } : {},
   beforeLoad: ({ search }) => {
     const to = search.page_id ? LEGACY[search.page_id] : undefined;
     if (to) throw redirect({ to, replace: true });
