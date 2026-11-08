@@ -50,63 +50,63 @@ export function validateEnvironment(): EnvValidationResult {
  */
 export const envConfig = {
   get siteUrl(): string {
-    const val = import.meta.env.VITE_SITE_URL;
+    const val = import.meta.env["VITE_SITE_URL"];
     if (!val || typeof val !== "string" || val.trim().length === 0) {
       throw new Error("[FATAL CONFIGURATION ERROR]: Missing required environment variable 'VITE_SITE_URL'.");
     }
     return val.trim();
   },
   get siteName(): string {
-    const val = import.meta.env.VITE_SITE_NAME;
+    const val = import.meta.env["VITE_SITE_NAME"];
     if (!val || typeof val !== "string" || val.trim().length === 0) {
       throw new Error("[FATAL CONFIGURATION ERROR]: Missing required environment variable 'VITE_SITE_NAME'.");
     }
     return val.trim();
   },
   get contactEmail(): string {
-    const val = import.meta.env.VITE_CONTACT_EMAIL;
+    const val = import.meta.env["VITE_CONTACT_EMAIL"];
     if (!val || typeof val !== "string" || val.trim().length === 0) {
       throw new Error("[FATAL CONFIGURATION ERROR]: Missing required environment variable 'VITE_CONTACT_EMAIL'.");
     }
     return val.trim();
   },
   get phoneLandline(): string {
-    const val = import.meta.env.VITE_CONTACT_PHONE_LANDLINE;
+    const val = import.meta.env["VITE_CONTACT_PHONE_LANDLINE"];
     if (!val || typeof val !== "string" || val.trim().length === 0) {
       throw new Error("[FATAL CONFIGURATION ERROR]: Missing required environment variable 'VITE_CONTACT_PHONE_LANDLINE'.");
     }
     return val.trim();
   },
   get phoneMobile(): string {
-    const val = import.meta.env.VITE_CONTACT_PHONE_MOBILE;
+    const val = import.meta.env["VITE_CONTACT_PHONE_MOBILE"];
     if (!val || typeof val !== "string" || val.trim().length === 0) {
       throw new Error("[FATAL CONFIGURATION ERROR]: Missing required environment variable 'VITE_CONTACT_PHONE_MOBILE'.");
     }
     return val.trim();
   },
   get address(): string {
-    const val = import.meta.env.VITE_CONTACT_ADDRESS;
+    const val = import.meta.env["VITE_CONTACT_ADDRESS"];
     if (!val || typeof val !== "string" || val.trim().length === 0) {
       throw new Error("[FATAL CONFIGURATION ERROR]: Missing required environment variable 'VITE_CONTACT_ADDRESS'.");
     }
     return val.trim();
   },
   get hubspotPortalId(): string {
-    const val = import.meta.env.VITE_HUBSPOT_PORTAL_ID;
+    const val = import.meta.env["VITE_HUBSPOT_PORTAL_ID"];
     if (!val || typeof val !== "string" || val.trim().length === 0) {
       throw new Error("[FATAL CONFIGURATION ERROR]: Missing required environment variable 'VITE_HUBSPOT_PORTAL_ID'.");
     }
     return val.trim();
   },
   get hubspotFormId(): string {
-    const val = import.meta.env.VITE_HUBSPOT_FORM_ID;
+    const val = import.meta.env["VITE_HUBSPOT_FORM_ID"];
     if (!val || typeof val !== "string" || val.trim().length === 0) {
       throw new Error("[FATAL CONFIGURATION ERROR]: Missing required environment variable 'VITE_HUBSPOT_FORM_ID'.");
     }
     return val.trim();
   },
   get hubspotRegion(): string {
-    const val = import.meta.env.VITE_HUBSPOT_REGION;
+    const val = import.meta.env["VITE_HUBSPOT_REGION"];
     if (!val || typeof val !== "string" || val.trim().length === 0) {
       throw new Error("[FATAL CONFIGURATION ERROR]: Missing required environment variable 'VITE_HUBSPOT_REGION'.");
     }
