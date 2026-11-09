@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { siteData } from "../content";
+import logo from "../../assets/immoshare-frankfurt-logo.png";
 
 interface NavbarProps {
   currentPath: string;
