@@ -30,10 +30,16 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
             <a
               href="/"
               onClick={(e) => handleLinkClick(e, "/")}
-              aria-label="Back to home"
-              className="text-lg sm:text-xl font-medium tracking-tight text-neutral-900 hover:opacity-80 transition-opacity"
+              aria-label="ImmoShare Frankfurt – zur Startseite"
+              className="flex items-center transition-opacity hover:opacity-80"
             >
-              {siteData.footer.brand}
+              <img
+                src={logo}
+                alt="ImmoShare Frankfurt"
+                width={1105}
+                height={333}
+                className="h-10 w-auto sm:h-12"
+              />
             </a>
           </div>
 
